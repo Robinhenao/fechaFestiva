@@ -11,14 +11,14 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin
-@RequestMapping("/festivos/verficar")
+@CrossOrigin("*")
+@RequestMapping("/festivos")
 public class FestivoController {
 
     @Autowired
     private FestivoServicio servicio;
 
-    @GetMapping("/{año}/{mes}/{dia}")
+    @GetMapping("/verificar/{año}/{mes}/{dia}")
     public ResponseEntity<String> Festivo(@PathVariable int año, @PathVariable int mes, @PathVariable int dia) {
         if (servicio.esFechaValida(año + "-" + mes + "-" + dia)) {
 
@@ -35,5 +35,11 @@ public class FestivoController {
             return ResponseEntity.badRequest().body("Fecha NO valida");
         }
     }
+
+    @RequestMapping(value = "/obtener/{ano}", method = RequestMethod.GET)
+    public List<FestivoDto> listaFestivo(@PathVariable int ano) {
+        return servicio.obtenerFestivos(ano);
+    }
+
 
 }
